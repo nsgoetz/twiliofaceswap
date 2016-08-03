@@ -41,31 +41,36 @@ def hello_world():
 
 @app.route('/receive_text', methods=['GET', 'POST'])
 def receive_text():
-    # try:
-    counter = session.get('counter', 0)
+    if NumMedia == 1:
+        # try:
+        counter = session.get('counter', 0)
 
-    # increment the counter
-    counter += 1
+        # increment the counter
+        counter += 1
 
-    # Save the new counter value in the session
-    session['counter'] = counter
+        # Save the new counter value in the session
+        session['counter'] = counter
 
-    from_number = request.values.get('From')
-    if from_number not in callers:
-        callers[from_number] = callers
-    name = callers[from_number]
-    
-    print "counter = ", counter
-    
-    receiver = request.values.get('To')
-    receiver = "Unknown_Reciever" if receiver == None else receiver
+        from_number = request.values.get('From')
+        if from_number not in callers:
+            callers[from_number] = callers
+        name = callers[from_number]
+        
+        print "counter = ", counter
+        
+        receiver = request.values.get('To')
+        receiver = "Unknown_Reciever" if receiver == None else receiver
 
-    message = "".join([name, " has messaged ", receiver, " ", str(counter), " times."])
-    resp = twilio.twiml.Response()
-    with resp.message(message) as m:
-        m.media("https://demo.twilio.com/owl.png")
-    return str(resp)
-
+        message = "".join([name, " has messaged ", receiver, " ", str(counter), " times."])
+        resp = twilio.twiml.Response()
+        with resp.message(message) as m:
+            m.media("https://demo.twilio.com/owl.png")
+        return str(resp)
+    else
+        resp = twilio.twiml.Response()
+        resp.sms("You must send an image!")
+        return str(resp)
+        
     # except Exception as inst:
     #     print(type(inst))    # the exception instance
     #     print(inst.args)     # arguments stored in .args
