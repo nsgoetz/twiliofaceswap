@@ -9,7 +9,7 @@ callers = {
 }
 
 app = Flask(__name__)
-#app.config.from_object(__name__)
+app.config.from_object(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def hello_world():
@@ -37,7 +37,7 @@ def hello_world():
     return 'Hello, World!'
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/receive_text', methods=['GET', 'POST'])
 def receive_text():
     counter = session.get('counter', 0)
 
@@ -59,6 +59,10 @@ def receive_text():
     resp.sms(message)
 
     return str(resp)
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
 
 #need local media server 
 
