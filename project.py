@@ -42,6 +42,9 @@ def hello_world():
 @app.route('/receive_text', methods=['GET', 'POST'])
 def receive_text():
     if NumMedia == 1:
+        media_type = request.values.get('MediaContentType')
+        media_url = request.values.get('MediaUrl')
+
         # try:
         counter = session.get('counter', 0)
 
@@ -61,7 +64,7 @@ def receive_text():
         receiver = request.values.get('To')
         receiver = "Unknown_Reciever" if receiver == None else receiver
 
-        message = "".join([name, " has messaged ", receiver, " ", str(counter), " times."])
+        message = "".join([name, " has messaged ", receiver, " ", str(counter), " times.", "Media = ", str(media_type), "url =", str(media_url)])
         resp = twilio.twiml.Response()
         with resp.message(message) as m:
             m.media("https://demo.twilio.com/owl.png")
@@ -70,7 +73,7 @@ def receive_text():
         resp = twilio.twiml.Response()
         resp.sms("You must send an image!")
         return str(resp)
-        
+
     # except Exception as inst:
     #     print(type(inst))    # the exception instance
     #     print(inst.args)     # arguments stored in .args
