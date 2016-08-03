@@ -6,7 +6,7 @@ import twilio.twiml
 SECRET_KEY = 'a secret key'
 # Try adding your own number to this list!
 callers = {
-    "+2143150822": "Noah Goetz"
+    "+12143150822": "Noah Goetz"
 }
 
 app = Flask(__name__)
@@ -50,10 +50,9 @@ def receive_text():
     session['counter'] = counter
 
     from_number = request.values.get('From')
-    if from_number in callers:
-        name = callers[from_number]
-    else:
-        name = "Unknown_Sender"
+    if from_number not in callers:
+        callers[from_number] = callers
+    name = callers[from_number]
     
     print "counter = ", counter
     
