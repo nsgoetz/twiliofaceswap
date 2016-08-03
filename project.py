@@ -1,6 +1,7 @@
 from flask import Flask, request, redirect, session
 from twilio.rest import TwilioRestClient
 import twilio.twiml
+import random
 
 #todo - fix lol
 SECRET_KEY = 'a secret key'
@@ -61,7 +62,8 @@ def receive_text():
 
     message = "".join([name, " has messaged ", receiver, " ", str(counter), " times."])
     resp = twilio.twiml.Response()
-    resp.sms(message)
+    with resp.message(message) as m:
+        m.media("https://demo.twilio.com/owl.png")
     return str(resp)
 
     # except Exception as inst:
