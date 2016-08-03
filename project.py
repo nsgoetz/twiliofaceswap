@@ -1,5 +1,6 @@
 from flask import Flask, request, redirect, session
 from twilio.rest import TwilioRestClient
+import twilio.twiml
 
 #todo - fix lol
 SECRET_KEY = 'a secret key'
@@ -39,6 +40,7 @@ def hello_world():
 
 @app.route('/receive_text', methods=['GET', 'POST'])
 def receive_text():
+    # try:
     counter = session.get('counter', 0)
 
     # increment the counter
@@ -51,15 +53,23 @@ def receive_text():
     if from_number in callers:
         name = callers[from_number]
     else:
-        name = "Monkey"
+        name = "Unknown_Sender"
+    
+    print "counter = ", counter
+    
+    receiver = request.values.get('To')
+    receiver = "Unknown_Reciever" if receiver == None else receiver
 
-    message = "".join([name, " has messaged ", request.values.get('To'), " ", 
-        str(counter), " times."])
+    message = "".join([name, " has messaged ", receiver, " ", str(counter), " times."])
     resp = twilio.twiml.Response()
     resp.sms(message)
-
     return str(resp)
 
+    # except Exception as inst:
+    #     print(type(inst))    # the exception instance
+    #     print(inst.args)     # arguments stored in .args
+    #     print(inst) 
+    #     return(inst)
 
 if __name__ == "__main__":
     app.run(debug=True)
