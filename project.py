@@ -36,6 +36,30 @@ def hello_world():
 
     return 'Hello, World!'
 
+
+@app.route('/', methods=['GET', 'POST'])
+def receive_text():
+    counter = session.get('counter', 0)
+
+    # increment the counter
+    counter += 1
+
+    # Save the new counter value in the session
+    session['counter'] = counter
+
+    from_number = request.values.get('From')
+    if from_number in callers:
+        name = callers[from_number]
+    else:
+        name = "Monkey"
+
+    message = "".join([name, " has messaged ", request.values.get('To'), " ", 
+        str(counter), " times."])
+    resp = twilio.twiml.Response()
+    resp.sms(message)
+
+    return str(resp)
+
 #need local media server 
 
 #need sessions 
